@@ -1,7 +1,3 @@
-
----
-
-
 # I need to write testings for isPrime method. I was thinking of input of 0,1,2, any prime number, any non-prime number. What do you think? Does that cover all?
 
 ---

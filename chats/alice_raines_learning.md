@@ -1,4 +1,7 @@
 # Explain what unit testing is in Java and why it's important, with a simple example.
+
+---
+
 ## Unit Testing in Java
 
 Unit testing means testing individual pieces of code — usually a single method or class — in isolation, to verify it behaves correctly. The most popular framework for this in Java is **JUnit**.
@@ -55,7 +58,12 @@ public class CalculatorTest {
 
 When you run this with a build tool like Maven or Gradle (`mvn test` or `gradle test`), JUnit executes every method marked `@Test` and reports which passed or failed — giving you fast, automated feedback every time you change your code.
 
+---
+
 # What's the difference between `assertEquals`, `assertTrue`, `assertFalse`, `assertNotNull`, and `assertThrows`? Give an example of when to use each.
+
+---
+
 ## JUnit Assertion Methods
 
 Each assertion checks a different kind of condition. Picking the right one makes test failures clearer, since the failure message tells you exactly what kind of check failed.
@@ -131,7 +139,12 @@ This passes only if `calc.divide(10, 0)` actually throws an `ArithmeticException
 
 A good rule of thumb: use the assertion that most precisely describes *what* you're checking — it makes test code self-documenting and gives you a more useful error message when something breaks.
 
+---
+
 # What are edge cases in unit testing, and how do I figure out which ones matter for a given function?
+
+---
+
 ## Edge Cases in Unit Testing
 
 An edge case is an input or condition at the extreme boundary of what a function accepts — situations that are valid (or invalid) but unusual enough that buggy code often handles them wrong, even when it handles "normal" inputs fine.
@@ -201,7 +214,12 @@ void testDivideTruncatesTowardZero() {
 
 You don't need to test *every* theoretical edge case — focus on the ones that are plausible given how the function will actually be called, and the ones where getting it wrong would actually cause a real problem.
 
+---
+
 # What's the difference between testing a 'happy path' and testing edge cases?
+
+---
+
 ## Happy Path vs. Edge Cases
 
 ### Happy path
@@ -263,7 +281,12 @@ A well-tested function usually has:
 
 If you only write happy-path tests, your test suite gives you false confidence: it'll pass even if the function mishandles zero, negative numbers, nulls, or boundary values — which is often exactly where real bugs show up in production.
 
+---
+
 # What does code coverage mean, and how do I check if my tests cover all the paths/branches in a function?
+
+---
+
 ## Code Coverage
 
 Code coverage measures how much of your source code gets executed when your test suite runs. It's reported as a percentage and comes in a few different flavors, each measuring a different thing.
@@ -388,7 +411,12 @@ Now both branches are green.
 
 In practice: aim for high **branch coverage**, use JaCoCo's report to spot yellow/red highlights, and write a targeted test for each missing branch — pairing this with the edge-case checklist we discussed earlier (zero, negative, null, boundary values) usually gets you very good real-world coverage.
 
+---
+
 # How do I run JUnit tests in a Gradle project from the terminal?
+
+---
+
 ## Running JUnit Tests with Gradle
 
 ### Basic command
@@ -464,7 +492,12 @@ open build/reports/tests/test/index.html           # view results (macOS)
 
 On Linux you'd use `xdg-open` instead of `open`; on Windows, just navigate to the file in File Explorer.
 
+---
+
 # Can you give me a checklist I can use to make sure I've tested a function thoroughly?
+
+---
+
 ## Thorough Function Testing Checklist
 
 ### 1. Understand the contract first
