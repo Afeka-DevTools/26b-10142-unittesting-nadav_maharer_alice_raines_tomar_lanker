@@ -8,6 +8,12 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    // הוספת הפלאגין של JaCoCo לכיסוי קוד
+    jacoco
+}
+
+jacoco {
+    toolVersion = "0.8.12"
 }
 
 repositories {
@@ -40,4 +46,16 @@ application {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    // הבטחה שדוח הכיסוי יופק מיד אחרי שהטסטים מסתיימים
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+// הגדרת הדוח של JaCoCo ויצירת קובץ HTML קריא
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // מוודא שהטסטים ירוצו קודם
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+        html.required.set(true)
+    }
 }
