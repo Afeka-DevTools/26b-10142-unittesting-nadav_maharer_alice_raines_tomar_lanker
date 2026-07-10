@@ -175,4 +175,38 @@ public class AppTest {
         largeArray[0] = 2;
         assertEquals(1.0001, App.average(largeArray), 0.0001);
     }
+
+    // ===== Additional tests (Tomer Lanker) =====
+    @Test
+    void average_doesNotModifyInputArray() {
+        int[] arr = new int[]{1, 2, 3};
+        int[] copy = arr.clone();
+        double ignored = App.average(arr);
+        assertArrayEquals(copy, arr);
+    }
+
+    @Test
+    void add_isCommutative() {
+        assertAll("commutative",
+            () -> assertEquals(App.add(3, 5), App.add(5, 3)),
+            () -> assertEquals(App.add(-7, 2), App.add(2, -7))
+        );
+    }
+
+    @Test
+    void factorial_throwsExactlyForNegative_withMeaningfulMessage_TomerLanker() {
+        IllegalArgumentException ex = assertThrowsExactly(IllegalArgumentException.class, () -> App.factorial(-1));
+        assertNotNull(ex.getMessage());
+        String msg = ex.getMessage().toLowerCase();
+        assertTrue(msg.contains("negative") || msg.contains("non") || msg.contains(">=0") || msg.contains("non-negative"),
+            "Exception message should indicate the non-negative requirement");
+    }
+
+    @Test
+    void average_handlesLargeValues() {
+        int[] arr = new int[1000];
+        Arrays.fill(arr, Integer.MAX_VALUE);
+        double avg = App.average(arr);
+        assertEquals((double) Integer.MAX_VALUE, avg, 0.1);
+    }
 }
