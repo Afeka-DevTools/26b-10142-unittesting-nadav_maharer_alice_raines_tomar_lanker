@@ -194,7 +194,7 @@ public class AppTest {
     }
 
     @Test
-    void factorial_throwsExactlyForNegative_withMeaningfulMessage_TomerLanker() {
+    void factorial_throwsExactlyForNegative_withMeaningfulMessage() {
         IllegalArgumentException ex = assertThrowsExactly(IllegalArgumentException.class, () -> App.factorial(-1));
         assertNotNull(ex.getMessage());
         String msg = ex.getMessage().toLowerCase();
