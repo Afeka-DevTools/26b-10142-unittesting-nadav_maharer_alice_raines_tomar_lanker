@@ -881,3 +881,83 @@ Both are correct and well-targeted.
 **Average test:** Good fix — you moved away from the overflow angle (which, as we noted, doesn't apply since `sum` is a `double`) and pivoted to something that's actually a real risk for this implementation: **uneven division**. `9999 * 1 + 2 = 10001`, divided by `10000` = `1.0001` — correct math, and this is a genuinely useful case because it confirms the division doesn't accidentally truncate or floor (which would happen if `sum` or the division were done with `int` arithmetic instead of `double`). Nice catch reframing it toward the right kind of risk instead of forcing the original "large array" idea to fit a hazard that isn't there.
 
 Both tests are precise, correctly computed, and testing something meaningfully different from your existing cases. Nothing to fix here.
+
+---
+
+# Nadav Maharer - Unit Test Design and Coverage
+
+## Conversation record
+
+- Tool: OpenAI Codex
+- Model: GPT-5 family coding model
+- Date: 2026-07-10
+- Context: Part 3 of Home Assignment 2.
+
+## Actual interaction and preflight
+
+Nadav supplied the assignment PDF, the remaining-work plan, and a repository link. The first link pointed to an unrelated Android shift tracker. After Codex reported the mismatch, Nadav provided the corrected `Afeka-DevTools/26b-10142-unittesting-nadav_maharer_alice_raines_tomar_lanker` repository.
+
+Codex pulled the latest `main`, verified a clean tree, and inspected `App.java`, `AppTest.java`, `chats`, `logs`, the empty `README`, and JaCoCo configuration. Existing tests covered Alice's and Tomer's methods only. Codex created `nadav/hw2-remaining-work` and limited additions to `reverse`, `isPalindrome`, `fibonacciUpTo`, `charFrequency`, `isAnagram`, `filterEvens`, and `mostCommonWord`.
+
+## Test-design discussion
+
+### `reverse`
+
+Tests cover ordinary text, empty and one-character strings, a palindrome, reversal of spaces/numbers/punctuation, and null. Exact string equality verifies every character.
+
+### `isPalindrome`
+
+Tests cover true and false cases, case differences, spaces and punctuation, empty and punctuation-only strings, one character, and null. The tests do not claim general Unicode support because the implementation retains only `[a-zA-Z0-9]`.
+
+### `fibonacciUpTo`
+
+Tests cover negative input, 0, 1, 2, a non-Fibonacci limit of 6, and exact limit 8. `assertIterableEquals` verifies values, duplicates, and order. Very large limits were deliberately rejected because `int` overflow can corrupt loop progression and risk nontermination.
+
+### `charFrequency`
+
+Complete expected maps verify repeated letters, case-sensitive keys, spaces, punctuation, digits, and empty input; null is tested separately.
+
+### `isAnagram`
+
+Tests cover matches, mismatches, capitalization, spaces, tabs and newlines, different counts and lengths, empty strings, punctuation differences, and both null arguments. Case and whitespace are ignored by the implementation, but punctuation is not.
+
+### `filterEvens`
+
+Tests cover mixed, all-even, all-odd, and empty lists; zero; negative evens; duplicates; order; input preservation; a null list; and a null element.
+
+### `mostCommonWord`
+
+Tests cover a clear winner, case-insensitive counting, internal punctuation, empty input, whitespace-only and punctuation-only input, null, and a tie.
+
+Corrections based on the current implementation:
+
+- `mostCommonWord("")` returns `""`.
+- Whitespace-only and punctuation-only input throws `NoSuchElementException`.
+- A tie must accept either tied word rather than rely on `HashMap` iteration order.
+- Internal punctuation is used for the punctuation test to avoid an unintended leading empty token.
+
+```java
+String result = App.mostCommonWord("cat dog");
+assertTrue(Set.of("cat", "dog").contains(result));
+```
+
+## Final execution and coverage review
+
+The initial sandboxed run failed to resolve `App.class` for every test, including unchanged existing tests. Investigation exposed a Java filesystem `AccessDeniedException`. Running the required command outside that restricted compiler sandbox succeeded:
+
+```powershell
+.\gradlew.bat clean test
+```
+
+Final result:
+
+- 100 tests executed
+- 0 failures, errors, or skipped tests
+- all seven assigned methods at 100% JaCoCo instruction and line coverage
+- all assigned methods with branch points at 100% branch coverage; branchless methods reported not applicable
+
+This is full reported line and practical branch coverage for the seven assigned methods, not a claim of complete theoretical path coverage.
+
+## Ownership follow-up
+
+Nadav asked why Tomer's `average_handlesLargeValues` test had been deleted. Codex checked the current file and diff and confirmed that the test remains unchanged. The diff removes only the class's former final `}` so Nadav's section can be inserted before it, then adds the final brace after the new section. Tomer's method body is still present immediately above the `Remaining App method tests (Nadav Maharer)` marker.

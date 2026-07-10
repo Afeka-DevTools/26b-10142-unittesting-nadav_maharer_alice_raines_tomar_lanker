@@ -3,6 +3,11 @@ package org.example;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class AppTest {
     // ===== isPrime tests (Alice Raines) =====
@@ -208,5 +213,303 @@ public class AppTest {
         Arrays.fill(arr, Integer.MAX_VALUE);
         double avg = App.average(arr);
         assertEquals((double) Integer.MAX_VALUE, avg, 0.1);
+    }
+
+    // ===== Remaining App method tests by Nadav Maharer =====
+
+    @Test
+    void reverse_returnsReversedString_forRegularInput() {
+        assertEquals("olleh", App.reverse("hello"));
+    }
+
+    @Test
+    void reverse_returnsEmptyString_forEmptyInput() {
+        assertEquals("", App.reverse(""));
+    }
+
+    @Test
+    void reverse_returnsSameCharacter_forSingleCharacterInput() {
+        assertEquals("a", App.reverse("a"));
+    }
+
+    @Test
+    void reverse_returnsSameString_forPalindromeInput() {
+        assertEquals("level", App.reverse("level"));
+    }
+
+    @Test
+    void reverse_reversesEveryCharacter_forSpacesNumbersAndPunctuation() {
+        assertEquals("!21 ba", App.reverse("ab 12!"));
+    }
+
+    @Test
+    void reverse_throwsNullPointerException_forNullInput() {
+        assertThrows(NullPointerException.class, () -> App.reverse(null));
+    }
+
+    @Test
+    void isPalindrome_returnsTrue_forTypicalPalindrome() {
+        assertTrue(App.isPalindrome("level"));
+    }
+
+    @Test
+    void isPalindrome_returnsFalse_forTypicalNonPalindrome() {
+        assertFalse(App.isPalindrome("hello"));
+    }
+
+    @Test
+    void isPalindrome_returnsTrue_whenInputDiffersOnlyByCase() {
+        assertTrue(App.isPalindrome("RaceCar"));
+    }
+
+    @Test
+    void isPalindrome_returnsTrue_whenInputContainsSpacesAndPunctuation() {
+        assertTrue(App.isPalindrome("A man, a plan, a canal: Panama!"));
+    }
+
+    @Test
+    void isPalindrome_returnsTrue_forEmptyInput() {
+        assertTrue(App.isPalindrome(""));
+    }
+
+    @Test
+    void isPalindrome_returnsTrue_forPunctuationOnlyInput() {
+        assertTrue(App.isPalindrome("!?.,"));
+    }
+
+    @Test
+    void isPalindrome_returnsTrue_forSingleCharacterInput() {
+        assertTrue(App.isPalindrome("x"));
+    }
+
+    @Test
+    void isPalindrome_throwsNullPointerException_forNullInput() {
+        assertThrows(NullPointerException.class, () -> App.isPalindrome(null));
+    }
+
+    @Test
+    void fibonacciUpTo_throwsIllegalArgumentException_forNegativeInput() {
+        assertThrows(IllegalArgumentException.class, () -> App.fibonacciUpTo(-1));
+    }
+
+    @Test
+    void fibonacciUpTo_returnsZero_forZeroLimit() {
+        assertIterableEquals(List.of(0), App.fibonacciUpTo(0));
+    }
+
+    @Test
+    void fibonacciUpTo_includesBothOnes_forOneLimit() {
+        assertIterableEquals(List.of(0, 1, 1), App.fibonacciUpTo(1));
+    }
+
+    @Test
+    void fibonacciUpTo_includesTwo_forTwoLimit() {
+        assertIterableEquals(List.of(0, 1, 1, 2), App.fibonacciUpTo(2));
+    }
+
+    @Test
+    void fibonacciUpTo_stopsBeforeNonFibonacciLimit() {
+        assertIterableEquals(List.of(0, 1, 1, 2, 3, 5), App.fibonacciUpTo(6));
+    }
+
+    @Test
+    void fibonacciUpTo_includesExactFibonacciLimit_inFibonacciOrder() {
+        assertIterableEquals(List.of(0, 1, 1, 2, 3, 5, 8), App.fibonacciUpTo(8));
+    }
+
+    @Test
+    void charFrequency_returnsCompleteCounts_forRepeatedLetters() {
+        Map<Character, Integer> expected = new HashMap<>();
+        expected.put('b', 1);
+        expected.put('a', 3);
+        expected.put('n', 2);
+
+        assertEquals(expected, App.charFrequency("banana"));
+    }
+
+    @Test
+    void charFrequency_countsUpperAndLowerCaseSeparately() {
+        assertEquals(Map.of('A', 1, 'a', 1), App.charFrequency("Aa"));
+    }
+
+    @Test
+    void charFrequency_countsSpaces() {
+        assertEquals(Map.of('a', 1, ' ', 2), App.charFrequency("a  "));
+    }
+
+    @Test
+    void charFrequency_countsPunctuation() {
+        assertEquals(Map.of('!', 2, '?', 1), App.charFrequency("!!?"));
+    }
+
+    @Test
+    void charFrequency_countsDigits() {
+        assertEquals(Map.of('1', 2, '2', 1), App.charFrequency("121"));
+    }
+
+    @Test
+    void charFrequency_returnsEmptyMap_forEmptyInput() {
+        assertEquals(Map.of(), App.charFrequency(""));
+    }
+
+    @Test
+    void charFrequency_throwsNullPointerException_forNullInput() {
+        assertThrows(NullPointerException.class, () -> App.charFrequency(null));
+    }
+
+    @Test
+    void isAnagram_returnsTrue_forRegularAnagrams() {
+        assertTrue(App.isAnagram("listen", "silent"));
+    }
+
+    @Test
+    void isAnagram_returnsFalse_forNonAnagrams() {
+        assertFalse(App.isAnagram("hello", "world"));
+    }
+
+    @Test
+    void isAnagram_returnsTrue_whenCapitalizationDiffers() {
+        assertTrue(App.isAnagram("Listen", "SILENT"));
+    }
+
+    @Test
+    void isAnagram_returnsTrue_whenSpacesDiffer() {
+        assertTrue(App.isAnagram("Dormitory", "Dirty room"));
+    }
+
+    @Test
+    void isAnagram_returnsTrue_whenTabsAndLineBreaksDiffer() {
+        assertTrue(App.isAnagram("the\teyes", "they\nsee"));
+    }
+
+    @Test
+    void isAnagram_returnsFalse_whenCharacterCountsDiffer() {
+        assertFalse(App.isAnagram("aab", "abb"));
+    }
+
+    @Test
+    void isAnagram_returnsFalse_whenLengthsDiffer() {
+        assertFalse(App.isAnagram("abc", "abcd"));
+    }
+
+    @Test
+    void isAnagram_returnsTrue_forTwoEmptyStrings() {
+        assertTrue(App.isAnagram("", ""));
+    }
+
+    @Test
+    void isAnagram_returnsFalse_whenPunctuationDiffers() {
+        assertFalse(App.isAnagram("conversation!", "voices rant on"));
+    }
+
+    @Test
+    void isAnagram_throwsNullPointerException_whenFirstInputIsNull() {
+        assertThrows(NullPointerException.class, () -> App.isAnagram(null, "abc"));
+    }
+
+    @Test
+    void isAnagram_throwsNullPointerException_whenSecondInputIsNull() {
+        assertThrows(NullPointerException.class, () -> App.isAnagram("abc", null));
+    }
+
+    @Test
+    void filterEvens_returnsOnlyEvenNumbers_forMixedInput() {
+        assertIterableEquals(List.of(2, 4), App.filterEvens(List.of(1, 2, 3, 4)));
+    }
+
+    @Test
+    void filterEvens_returnsAllValues_forAllEvenInput() {
+        assertIterableEquals(List.of(2, 4, 6), App.filterEvens(List.of(2, 4, 6)));
+    }
+
+    @Test
+    void filterEvens_returnsEmptyList_forAllOddInput() {
+        assertIterableEquals(List.of(), App.filterEvens(List.of(1, 3, 5)));
+    }
+
+    @Test
+    void filterEvens_returnsEmptyList_forEmptyInput() {
+        assertIterableEquals(List.of(), App.filterEvens(List.of()));
+    }
+
+    @Test
+    void filterEvens_includesZero() {
+        assertIterableEquals(List.of(0), App.filterEvens(List.of(0, 1)));
+    }
+
+    @Test
+    void filterEvens_includesNegativeEvenNumbers() {
+        assertIterableEquals(List.of(-4, -2), App.filterEvens(List.of(-4, -3, -2, -1)));
+    }
+
+    @Test
+    void filterEvens_preservesDuplicatesAndOriginalOrder() {
+        assertIterableEquals(List.of(-4, 0, 2, 2), App.filterEvens(List.of(-4, -3, 0, 2, 2)));
+    }
+
+    @Test
+    void filterEvens_doesNotModifyInputList() {
+        List<Integer> input = new java.util.ArrayList<>(List.of(1, 2, 3, 4));
+        List<Integer> original = List.copyOf(input);
+
+        App.filterEvens(input);
+
+        assertIterableEquals(original, input);
+    }
+
+    @Test
+    void filterEvens_throwsNullPointerException_forNullList() {
+        assertThrows(NullPointerException.class, () -> App.filterEvens(null));
+    }
+
+    @Test
+    void filterEvens_throwsNullPointerException_forNullElement() {
+        List<Integer> input = new java.util.ArrayList<>();
+        input.add(2);
+        input.add(null);
+
+        assertThrows(NullPointerException.class, () -> App.filterEvens(input));
+    }
+
+    @Test
+    void mostCommonWord_returnsClearWinner_forNormalSentence() {
+        assertEquals("fish", App.mostCommonWord("One fish, two fish; red fish."));
+    }
+
+    @Test
+    void mostCommonWord_countsWordsCaseInsensitively() {
+        assertEquals("apple", App.mostCommonWord("Apple banana APPLE"));
+    }
+
+    @Test
+    void mostCommonWord_treatsInternalPunctuationAsSeparator() {
+        assertEquals("red", App.mostCommonWord("red-blue red"));
+    }
+
+    @Test
+    void mostCommonWord_returnsEmptyString_forEmptyInput() {
+        assertEquals("", App.mostCommonWord(""));
+    }
+
+    @Test
+    void mostCommonWord_throwsNoSuchElementException_forWhitespaceOnlyInput() {
+        assertThrows(NoSuchElementException.class, () -> App.mostCommonWord("   \t\n"));
+    }
+
+    @Test
+    void mostCommonWord_throwsNoSuchElementException_forPunctuationOnlyInput() {
+        assertThrows(NoSuchElementException.class, () -> App.mostCommonWord("!?.,"));
+    }
+
+    @Test
+    void mostCommonWord_throwsNullPointerException_forNullInput() {
+        assertThrows(NullPointerException.class, () -> App.mostCommonWord(null));
+    }
+
+    @Test
+    void mostCommonWord_returnsEitherWinner_whenWordsAreTied() {
+        String result = App.mostCommonWord("cat dog");
+
+        assertTrue(Set.of("cat", "dog").contains(result));
     }
 }
